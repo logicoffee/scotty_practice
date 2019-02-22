@@ -35,6 +35,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - study-report
+    - scotty
 
 tests:
   study-report-test:
