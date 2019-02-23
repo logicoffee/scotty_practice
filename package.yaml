@@ -36,6 +36,9 @@ executables:
     dependencies:
     - study-report
     - scotty
+    - persistable-record
+    - relational-query-HDBC
+    - relational-query
 
 tests:
   study-report-test:
