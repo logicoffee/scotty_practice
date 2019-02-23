@@ -1,3 +1,6 @@
 .stack-work/
-study-report.cabal
+spicy.cabal
 *~
+
+# environment file
+.env
