@@ -1,6 +1,6 @@
-name:                study-report
+name:                spicy
 version:             0.1.0.0
-github:              "logicoffee/study-report"
+github:              "logicoffee/scotty_test"
 license:             BSD3
 author:              "Ryo Iketani"
 maintainer:          "riemann1618@gmail.com"
@@ -16,7 +16,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/logicoffee/study-report#readme>
+description:         Please see the README on GitHub at <https://github.com/logicoffee/scotty_test#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -25,7 +25,7 @@ library:
   source-dirs: src
 
 executables:
-  study-report:
+  spicy:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -34,14 +34,14 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - study-report
+    - spicy
     - scotty
     - persistable-record
     - relational-query-HDBC
     - relational-query
 
 tests:
-  study-report-test:
+  spicy-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -50,4 +50,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - study-report
+    - spicy
