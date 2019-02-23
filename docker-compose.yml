@@ -1,0 +1,10 @@
+version: '3'
+services:
+  db:
+    image: postgres:11.1-alpine
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=spicy
+      - POSTGRES_DB=spicy
+    ports:
+      - "5432:5432"
