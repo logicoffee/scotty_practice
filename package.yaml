@@ -36,6 +36,7 @@ executables:
     dependencies:
     - spicy
     - scotty
+    - HDBC-postgresql
     - persistable-record
     - relational-query-HDBC
     - relational-query
