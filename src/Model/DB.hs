@@ -1,11 +1,8 @@
-{-# LANGUAGE TemplateHaskell #-}
 module Model.DB where
 
-import           Database.HDBC.PostgreSQL        (Connection, connectPostgreSQL)
-import           Database.HDBC.Schema.Driver     (Driver, typeMap)
-import           Database.HDBC.Schema.PostgreSQL (driverPostgreSQL)
-import           System.Environment              (getEnv)
-import           Text.Printf                     (printf)
+import           Database.HDBC.PostgreSQL (Connection, connectPostgreSQL)
+import           System.Environment       (getEnv)
+import           Text.Printf              (printf)
 
 connectPG :: IO Connection
 connectPG = do
@@ -17,6 +14,3 @@ connectPG = do
     connectPostgreSQL $
         printf "host=%s port=%s user= %s dbname=%s password=%s sslmode=disable"
             host port user db_name password
-
-driverPG :: Driver Connection
-driverPG = driverPostgreSQL { typeMap = [("integer", [t|Int|])] }
