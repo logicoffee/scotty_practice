@@ -4,3 +4,6 @@ spicy.cabal
 
 # environment file
 .env
+
+# db data
+/db/data

@@ -6,5 +6,8 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=spicy
       - POSTGRES_DB=spicy
+    volumes:
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./db/data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
