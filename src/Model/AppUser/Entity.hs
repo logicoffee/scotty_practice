@@ -4,7 +4,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TemplateHaskell       #-}
 
-module Model.AppUser where
+module Model.AppUser.Entity where
 
 import           Database.HDBC.Query.TH          (defineTableFromDB')
 import           Database.HDBC.Schema.PostgreSQL (driverPostgreSQL)
