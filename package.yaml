@@ -28,6 +28,7 @@ dependencies:
   - relational-query-HDBC
   - relational-query
   - product-isomorphic
+  - cryptonite
 
 library:
   source-dirs: src
