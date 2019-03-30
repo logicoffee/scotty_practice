@@ -24,3 +24,17 @@ defineTableFromDB'
         ("amazon_asin", [t|Text|])
     ]
     [''Show, ''Generic]
+
+data Item' = Item'
+    { pUserId    :: !(Maybe Int)
+    , pAmazonUrl :: !String
+    , pHotLevel  :: !Int
+    } deriving (Generic)
+
+piItem :: Pi Item Item'
+piItem = Item'
+    |$| userId'
+    |*| amazonUrl'
+    |*| hotLevel'
+
+makeRelationalRecord ''Item'
