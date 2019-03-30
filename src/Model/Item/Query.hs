@@ -15,4 +15,4 @@ findById itemId = do
 findByAppUser :: AppUser -> IO [Item]
 findByAppUser user = do
     conn <- connectPG
-    return $ runQuery' conn selectItem (Model.AppUser.Entity.id user)
+    runQuery' conn selectItem (Model.AppUser.Entity.id user)
