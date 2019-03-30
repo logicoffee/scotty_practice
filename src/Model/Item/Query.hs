@@ -15,4 +15,10 @@ findById itemId = do
 findByAppUser :: AppUser -> IO [Item]
 findByAppUser user = do
     conn <- connectPG
-    return $ runQuery' conn selectItem (Model.AppUser.Entity.id user)
+    runQuery' conn selectItemsByAppUser (Model.AppUser.Entity.id user)
+        where
+            selectItemsByAppUser = relation' . placeholder $ \ph -> do
+                i <- query item
+                wheres $ i ! userId' .=. ph
+                return i
+

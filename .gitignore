@@ -3,7 +3,7 @@ spicy.cabal
 *~
 
 # environment file
-.env
+.envrc
 
 # db data
 /db/data

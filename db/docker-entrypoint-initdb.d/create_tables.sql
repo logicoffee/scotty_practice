@@ -1,11 +1,12 @@
 CREATE TABLE app_user (
     id SERIAL PRIMARY KEY,
-    twitter_id text NOT NULL
+    name text NOT NULL,
+    password_hash text NOT NULL
 );
 
 CREATE TABLE item (
     id SERIAL PRIMARY KEY,
     user_id integer REFERENCES app_user (id),
-    amazon_url text NOT NULL,
+    amazon_asin text NOT NULL,
     hot_level integer NOT NULL
 );

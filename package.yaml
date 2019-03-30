@@ -20,6 +20,7 @@ description:         Please see the README on GitHub at <https://github.com/logi
 
 dependencies:
   - base >= 4.7 && < 5
+  - text
   - scotty
   - HDBC
   - HDBC-postgresql
@@ -27,6 +28,7 @@ dependencies:
   - relational-query-HDBC
   - relational-query
   - product-isomorphic
+  - cryptonite
 
 library:
   source-dirs: src
