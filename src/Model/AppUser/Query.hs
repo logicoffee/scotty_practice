@@ -1,5 +1,6 @@
 module Model.AppUser.Query where
 
+import           Data.Text
 import           Database.HDBC.Record.Query      (runQuery')
 import           Database.Relational.Monad.Class (wheres)
 import           Database.Relational.Projectable (placeholder, (!), (.=.))
@@ -15,13 +16,13 @@ findById userId = do
     users <- runQuery' conn selectAppUser userId
     return $ safeHead users
 
-findByTwitterId :: String -> IO (Maybe AppUser)
-findByTwitterId twitterId = do
+findByName :: Text -> IO (Maybe AppUser)
+findByName name = do
     conn <- connectPG
-    users <- runQuery' conn (relationalQuery selectByTwitterId) twitterId
+    users <- runQuery' conn (relationalQuery selectByName) name
     return $ safeHead users
         where
-            selectByTwitterId = relation' . placeholder $ \ph -> do
+            selectByName = relation' . placeholder $ \ph -> do
                 u <- query appUser
-                wheres $ u ! twitterId' .=. ph
+                wheres $ u ! name' .=. ph
                 return u
