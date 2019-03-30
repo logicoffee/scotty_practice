@@ -6,6 +6,7 @@
 
 module Model.Item.Entity where
 
+import           Data.Text                       (Text)
 import           Database.HDBC.Query.TH          (defineTableFromDB')
 import           Database.HDBC.Schema.PostgreSQL (driverPostgreSQL)
 import           GHC.Generics                    (Generic)
@@ -19,6 +20,7 @@ defineTableFromDB'
     [
         ("id", [t|Int|]),
         ("user_id", [t|Int|]),
-        ("hot_level", [t|Int|])
+        ("hot_level", [t|Int|]),
+        ("amazon_asin", [t|Text|])
     ]
     [''Show, ''Generic]
