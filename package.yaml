@@ -21,6 +21,8 @@ description:         Please see the README on GitHub at <https://github.com/logi
 dependencies:
   - base >= 4.7 && < 5
   - text
+  - scientific
+  - aeson
   - scotty
   - HDBC
   - HDBC-postgresql
