@@ -8,7 +8,7 @@
 module Model.AppUser.Entity where
 
 import           Data.Functor.ProductIsomorphic.Class ((|$|), (|*|))
-import           Data.Text                            (Text)
+import           Data.Text.Lazy                       (Text)
 import           Database.HDBC.Query.TH               (defineTableFromDB',
                                                        makeRelationalRecord)
 import           Database.HDBC.Schema.Driver          (Driver (..))

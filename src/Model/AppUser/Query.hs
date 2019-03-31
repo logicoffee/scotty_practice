@@ -1,6 +1,6 @@
 module Model.AppUser.Query where
 
-import           Data.Text
+import           Data.Text.Lazy
 import           Database.HDBC.Record.Query      (runQuery')
 import           Database.Relational.Monad.Class (wheres)
 import           Database.Relational.Projectable (placeholder, (!), (.=.))
