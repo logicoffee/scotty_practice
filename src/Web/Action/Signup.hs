@@ -15,4 +15,4 @@ signupAction = do
     foo <- liftIO $ trySignup tmpU
     case foo of
         Left msgs -> text $ mconcat msgs
-        Right uid -> text "uidを含んだjson"
+        Right uid -> text "uidを含んだjson" -- クッキーをセット
