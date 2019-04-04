@@ -1,6 +1,7 @@
 module Main where
 
-import Lib
+import           Web.Route
+import           Web.Scotty
 
 main :: IO ()
-main = someFunc
+main = scotty 3000 route
