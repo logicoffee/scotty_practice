@@ -15,7 +15,7 @@ signupAction = do
         <$> param "name"
         <*> param "password"
         <*> param "password_confirmation"
-    foo <- liftIO $ trySignup tmpU
-    case foo of
+    result <- liftIO $ trySignup tmpU
+    case result of
         Left msgs -> json $ object ["errors" .= map T.toStrict msgs]
         Right uid -> json $ object ["user_id" .= Number (scientific (toInteger uid) 0)]
