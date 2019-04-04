@@ -13,8 +13,8 @@ singleInsert :: AppUser' -> IO (Maybe Int)
 singleInsert appUser = do
     conn <- connectPG
     runInsert conn (insert piAppUser) appUser
-    maybeU <- findByName $ pName appUser
     commit conn
+    maybeU <- findByName $ pName appUser
     return $ fmap Model.AppUser.Entity.id maybeU
 
 trySignup :: TmpAppUser -> IO (Either [Text] Int)
