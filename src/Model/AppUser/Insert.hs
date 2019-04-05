@@ -17,6 +17,7 @@ singleInsert appUser = do
     maybeU <- findByName $ pName appUser
     return $ fmap Model.AppUser.Entity.id maybeU
 
+-- TODO: 名前の一意性を確認する
 trySignup :: TmpAppUser -> IO (Either [Text] Int)
 trySignup tmpU =
     case makeAppUser' tmpU of
