@@ -17,13 +17,16 @@ singleInsert appUser = do
     maybeU <- findByName $ pName appUser
     return $ fmap Model.AppUser.Entity.id maybeU
 
--- TODO: 名前の一意性を確認する
 trySignup :: TmpAppUser -> IO (Either [Text] Int)
-trySignup tmpU =
-    case makeAppUser' tmpU of
-        Left msgs -> return $ Left msgs
-        Right u   -> do
-            maybeUid <- singleInsert u
-            case maybeUid of
-                Nothing -> return $ Left ["insertion failed"]
-                Just id -> return $ Right id
+trySignup tmpU = do
+    maybeU <- findByName $ tmpName tmpU
+    case maybeU of
+        Just _  -> return $ Left ["this name is already taken"]
+        Nothing ->
+            case makeAppUser' tmpU of
+                Left msgs -> return $ Left msgs
+                Right u   -> do
+                    maybeUid <- singleInsert u
+                    case maybeUid of
+                        Nothing -> return $ Left ["insertion failed"]
+                        Just id -> return $ Right id
