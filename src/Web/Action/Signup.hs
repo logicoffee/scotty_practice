@@ -1,10 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Web.Action.Signup where
 
-import           Control.Monad.IO.Class (liftIO)
+import           Control.Monad.IO.Class     (liftIO)
+import           Control.Monad.Trans.Except
 import           Data.Aeson.Types
-import           Data.Scientific        (scientific)
-import qualified Data.Text.Lazy         as T
+import           Data.Scientific            (scientific)
+import qualified Data.Text.Lazy             as T
 import           Model.AppUser.Entity
 import           Model.AppUser.Insert
 import           Web.Scotty
@@ -15,7 +16,7 @@ signupAction = do
         <$> param "name"
         <*> param "password"
         <*> param "password_confirmation"
-    result <- liftIO $ trySignup tmpU
+    result <- liftIO $ runExceptT $ trySignup tmpU
     case result of
         Left msgs -> json $ object ["errors" .= map T.toStrict msgs]
         Right uid -> json $ object ["user_id" .= Number (scientific (toInteger uid) 0)]

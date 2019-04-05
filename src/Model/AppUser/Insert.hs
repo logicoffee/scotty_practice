@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Model.AppUser.Insert where
 
+import           Control.Monad.IO.Class      (liftIO)
+import           Control.Monad.Trans.Except
 import           Data.Text.Lazy
 import           Database.HDBC               (commit)
 import           Database.HDBC.Record.Insert (runInsert)
@@ -9,21 +11,22 @@ import           Model.AppUser.Entity
 import           Model.AppUser.Query
 import           Model.DB                    (connectPG)
 
-singleInsert :: AppUser' -> IO (Maybe Int)
+singleInsert :: AppUser' -> ExceptT [Text] IO Int
 singleInsert appUser = do
-    conn <- connectPG
-    runInsert conn (insert piAppUser) appUser
-    commit conn
-    maybeU <- findByName $ pName appUser
-    return $ fmap Model.AppUser.Entity.id maybeU
+    maybeU <- liftIO $ do
+        conn <- connectPG
+        runInsert conn (insert piAppUser) appUser
+        commit conn
+        findByName $ pName appUser
+    case maybeU of
+        Nothing -> throwE ["insertion failed"]
+        Just u  -> return $ Model.AppUser.Entity.id u
 
--- TODO: 名前の一意性を確認する
-trySignup :: TmpAppUser -> IO (Either [Text] Int)
-trySignup tmpU =
-    case makeAppUser' tmpU of
-        Left msgs -> return $ Left msgs
-        Right u   -> do
-            maybeUid <- singleInsert u
-            case maybeUid of
-                Nothing -> return $ Left ["insertion failed"]
-                Just id -> return $ Right id
+trySignup :: TmpAppUser -> ExceptT [Text] IO Int
+trySignup tmpU = do
+    maybeU <- liftIO $ findByName $ tmpName tmpU
+    case maybeU of
+        Just _  -> throwE ["this name is already taken"]
+        Nothing -> do
+            u <- ExceptT . return $ makeAppUser' tmpU
+            singleInsert u
