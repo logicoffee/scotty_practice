@@ -9,13 +9,15 @@ import           Model.AppUser.Entity
 import           Model.AppUser.Query
 import           Model.DB                    (connectPG)
 
-singleInsert :: AppUser' -> IO (Maybe Int)
+singleInsert :: AppUser' -> IO (Either [Text] Int)
 singleInsert appUser = do
     conn <- connectPG
     runInsert conn (insert piAppUser) appUser
     commit conn
     maybeU <- findByName $ pName appUser
-    return $ fmap Model.AppUser.Entity.id maybeU
+    case maybeU of
+        Nothing -> return $ Left ["insertion failed"]
+        Just u  -> return $ Right $ Model.AppUser.Entity.id u
 
 trySignup :: TmpAppUser -> IO (Either [Text] Int)
 trySignup tmpU = do
@@ -25,8 +27,4 @@ trySignup tmpU = do
         Nothing ->
             case makeAppUser' tmpU of
                 Left msgs -> return $ Left msgs
-                Right u   -> do
-                    maybeUid <- singleInsert u
-                    case maybeUid of
-                        Nothing -> return $ Left ["insertion failed"]
-                        Just id -> return $ Right id
+                Right u   -> singleInsert u
