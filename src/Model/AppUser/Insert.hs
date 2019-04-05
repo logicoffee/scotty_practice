@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Model.AppUser.Insert where
 
+import           Control.Monad.IO.Class      (liftIO)
+import           Control.Monad.Trans.Except  hiding (except)
 import           Data.Text.Lazy
 import           Database.HDBC               (commit)
 import           Database.HDBC.Record.Insert (runInsert)
@@ -9,22 +11,25 @@ import           Model.AppUser.Entity
 import           Model.AppUser.Query
 import           Model.DB                    (connectPG)
 
-singleInsert :: AppUser' -> IO (Either [Text] Int)
+singleInsert :: AppUser' -> ExceptT [Text] IO Int
 singleInsert appUser = do
-    conn <- connectPG
-    runInsert conn (insert piAppUser) appUser
-    commit conn
-    maybeU <- findByName $ pName appUser
+    maybeU <- liftIO $ do
+        conn <- connectPG
+        runInsert conn (insert piAppUser) appUser
+        commit conn
+        findByName $ pName appUser
     case maybeU of
-        Nothing -> return $ Left ["insertion failed"]
-        Just u  -> return $ Right $ Model.AppUser.Entity.id u
+        Nothing -> throwE ["insertion failed"]
+        Just u  -> return $ Model.AppUser.Entity.id u
 
-trySignup :: TmpAppUser -> IO (Either [Text] Int)
+trySignup :: TmpAppUser -> ExceptT [Text] IO Int
 trySignup tmpU = do
-    maybeU <- findByName $ tmpName tmpU
+    maybeU <- liftIO $ findByName $ tmpName tmpU
     case maybeU of
-        Just _  -> return $ Left ["this name is already taken"]
-        Nothing ->
-            case makeAppUser' tmpU of
-                Left msgs -> return $ Left msgs
-                Right u   -> singleInsert u
+        Just _  -> throwE ["this name is already taken"]
+        Nothing -> do
+            u <- except $ makeAppUser' tmpU
+            singleInsert u
+
+except :: Monad m => Either a b -> ExceptT a m b
+except = ExceptT . return
