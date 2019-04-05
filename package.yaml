@@ -58,3 +58,8 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - spicy
+      - bytestring
+      - hspec
+      - hspec-wai
+      - http-types
+      - wai-extra
