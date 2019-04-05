@@ -2,7 +2,7 @@
 module Model.AppUser.Insert where
 
 import           Control.Monad.IO.Class      (liftIO)
-import           Control.Monad.Trans.Except  hiding (except)
+import           Control.Monad.Trans.Except
 import           Data.Text.Lazy
 import           Database.HDBC               (commit)
 import           Database.HDBC.Record.Insert (runInsert)
@@ -28,8 +28,5 @@ trySignup tmpU = do
     case maybeU of
         Just _  -> throwE ["this name is already taken"]
         Nothing -> do
-            u <- except $ makeAppUser' tmpU
+            u <- ExceptT . return $ makeAppUser' tmpU
             singleInsert u
-
-except :: Monad m => Either a b -> ExceptT a m b
-except = ExceptT . return
