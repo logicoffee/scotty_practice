@@ -22,6 +22,7 @@ dependencies:
   - base >= 4.7 && < 5
   - transformers
   - text
+  - bytestring
   - scientific
   - aeson
   - scotty
@@ -32,6 +33,12 @@ dependencies:
   - relational-query
   - product-isomorphic
   - cryptonite
+  - vault
+  - serversession
+  - serversession-frontend-wai
+  - serversession-backend-acid-state
+  - wai-session
+  - acid-state
 
 library:
   source-dirs: src
@@ -59,7 +66,6 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - spicy
-      - bytestring
       - hspec
       - hspec-wai
       - http-types
