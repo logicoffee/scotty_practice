@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Web.Route where
 
-import           Web.Action.Signup
+import           Web.Action.Session
 import           Web.Scotty
 
 route :: ScottyM ()

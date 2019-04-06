@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Web.Action.Signup where
+module Web.Action.Session where
 
 import           Control.Monad.IO.Class     (liftIO)
 import           Control.Monad.Trans.Except
