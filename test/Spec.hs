@@ -16,7 +16,7 @@ spec :: Spec
 spec = with (scottyApp route) $
     describe "POST /signup" $
         it "responds with user id" $
-            post "/signup" "name=foo&password=ppp&password_confirmation&ppp"
+            post "/signup" "name=foo&password=ppp&password_confirmation=ppp"
                 `shouldRespondWith` 200
 
 
