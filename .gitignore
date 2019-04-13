@@ -7,3 +7,6 @@ spicy.cabal
 
 # db data
 /db/data
+
+# session data
+/state/
