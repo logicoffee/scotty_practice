@@ -1,14 +1,15 @@
 module Main where
 
 import           Data.Acid
+import           Web.App
+import           Web.Scotty
+import           Web.ServerSession.Backend.Acid
+import           Web.ServerSession.Frontend.Wai
+
 import           Data.ByteString                (ByteString)
 import           Data.Text                      (Text)
 import qualified Data.Vault.Lazy                as V
 import           Network.Wai.Session            (Session)
-import           Web.Route
-import           Web.Scotty
-import           Web.ServerSession.Backend.Acid
-import           Web.ServerSession.Frontend.Wai
 
 main :: IO ()
 main = do
@@ -18,4 +19,4 @@ main = do
 
     scotty 3000 $ do
         middleware session
-        route
+        app key
