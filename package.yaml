@@ -37,6 +37,7 @@ dependencies:
   - serversession
   - serversession-frontend-wai
   - serversession-backend-acid-state
+  - wai
   - wai-session
   - acid-state
 
