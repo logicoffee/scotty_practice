@@ -1,0 +1,291 @@
+swagger: "2.0"
+info:
+  version: development
+  description: spicy
+  title: spicy
+host: "???"
+basePath: /
+schemes:
+  - https
+paths:
+  /app-users:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: appUser
+          description: user information
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              password:
+                type: string
+              password_confirmation:
+                type: string
+      responses:
+        200:
+          description: user created
+          headers:
+            Set-Cookie:
+              type: string
+              description: session id
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+        400:
+          description: invalid request
+          schema:
+            $ref: '#/definitions/Response400'
+
+  /signin: #保留
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: appUser
+          description: user information
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: signed in
+          headers:
+            Set-Cookie:
+              type: string
+              description: session id
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+        400:
+          description: invalid name password combination
+          schema:
+            $ref: '#/definitions/Response400'
+
+  /app-user:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Cookie
+          type: string
+          description: session id
+      responses:
+        200:
+          description: successful operation
+          headers:
+            Set-Cookie:
+              type: string
+              description: session id
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+        401:
+          description: not authenticated
+    delete:
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Cookie
+          type: string
+          description: session id
+      responses:
+        200:
+          description: user deleted
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+        401:
+          description: not authenticated
+
+  /app-user/items:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Cookie
+          type: string
+          description: session id
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  $ref: '#/definitions/Item'
+        401:
+          description: not authenticated
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Cookie
+          type: string
+          description: session id
+        - in: body
+          name: item
+          description: item information
+          schema:
+            $ref: '#/definitions/ItemRequest'
+      responses:
+        200:
+          description: item created
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          description: invalid request body
+          schema:
+            $ref: '#/definitions/Response400'
+        401:
+          description: not authenticated
+
+  /app-user/items/{itemId}:
+    put:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          type: integer
+          description: item id
+        - in: header
+          name: Cookie
+          type: string
+          description: session id
+        - in: body
+          name: item
+          description: item information
+          schema:
+            $ref: '#/definitions/ItemRequest'
+      responses:
+        200:
+          description: item updated
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          description: invalid request body
+          schema:
+            $ref: '#/definitions/Response400'
+        401:
+          description: not authenticated
+        404:
+          description: not found
+    delete:
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          type: integer
+          description: item id
+        - in: header
+          name: Cookie
+          type: string
+          description: session id
+      responses:
+        200:
+          description: item deleted
+          schema:
+            $ref: '#/definitions/Item'
+        401:
+          description: not authenticated
+        404:
+          description: not found
+
+  /items:
+    get:
+      produces:
+        - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  $ref: '#/definitions/Item'
+
+  /items/{itemId}:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          type: integer
+          description: item id
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Item'
+        404:
+          description: not found
+
+definitions:
+  Response400:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          type: string
+  Item:
+    type: object
+    properties:
+      id:
+        type: integer
+      userId:
+        type: integer
+      amazonAsin:
+        type: string
+      hotLevel:
+        type: integer
+  ItemRequest:
+    type: object
+    properties:
+      amazonAsin:
+        type: string
+      hotLevel:
+        type: integer
+
