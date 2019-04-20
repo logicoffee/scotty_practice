@@ -39,6 +39,7 @@ dependencies:
   - serversession-backend-acid-state
   - wai
   - wai-session
+  - http-types
   - acid-state
 
 library:

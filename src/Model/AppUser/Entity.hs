@@ -27,8 +27,8 @@ defineTableFromDB'
     [''Show, ''Generic]
 
 data AppUser' = AppUser'
-    { pName         :: !Text
-    , pPasswordHash :: !Text
+    { pName           :: !Text
+    , pPasswordDigest :: !Text
     } deriving (Generic)
 
 data TmpAppUser = TmpAppUser
@@ -42,7 +42,7 @@ makeRelationalRecord ''AppUser'
 piAppUser :: Pi AppUser AppUser'
 piAppUser = AppUser'
     |$| name'
-    |*| passwordHash'
+    |*| passwordDigest'
 
 -- TODO: バリデーションの実装
 makeAppUser' :: TmpAppUser -> Either [Text] AppUser'
