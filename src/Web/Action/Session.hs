@@ -8,9 +8,7 @@ import           Data.Scientific            (scientific)
 import           Data.Text.Encoding         (encodeUtf8)
 import qualified Data.Text.Lazy             as TL
 import qualified Data.Vault.Lazy            as V
-import           Model.AppUser.Entity
-import           Model.AppUser.Insert
-import           Model.AppUser.Query
+import           Model.AppUser
 import           Network.HTTP.Types.Status
 import           Network.Wai
 import           Util
@@ -40,6 +38,6 @@ signinAction key = do
         Just u  -> if passwordDigest u == hashPassword p
             then do
                 liftIO $ insertSession "user" (encodeUtf8 (TL.toStrict n))
-                json $ object ["user_id" .= Number (scientific (toInteger (Model.AppUser.Entity.id u)) 0)]
+                json $ object ["user_id" .= Number (scientific (toInteger (Model.AppUser.id u)) 0)]
             else status status400
 
