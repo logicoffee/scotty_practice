@@ -35,10 +35,10 @@ signinAction key = do
     p <- param "password"
     maybeU <- liftIO $ findByName n
     case maybeU of
-        Nothing -> json $ object ["errors" .= TL.toStrict "name or password is invalid"]
+        Nothing -> status 400
         Just u  -> if passwordHash u == hashPassword p
             then do
                 liftIO $ insertSession "user" (encodeUtf8 (TL.toStrict n))
                 json $ object ["user_id" .= Number (scientific (toInteger (Model.AppUser.Entity.id u)) 0)]
-            else json $ object ["errors" .= TL.toStrict "name or password is invalid"]
+            else status 400
 
