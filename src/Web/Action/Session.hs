@@ -15,11 +15,6 @@ import           Network.Wai
 import           Util
 import           Web.Scotty
 
-import           Data.ByteString            (ByteString)
-import qualified Data.Text                  as T
-import qualified Data.Vault.Lazy            as V
-import           Network.Wai.Session        (Session)
-
 signupAction :: ActionM ()
 signupAction = do
     tmpU <- TmpAppUser
@@ -31,7 +26,7 @@ signupAction = do
         Left msgs -> json $ object ["errors" .= map TL.toStrict msgs]
         Right uid -> json $ object ["user_id" .= Number (scientific (toInteger uid) 0)]
 
-signinAction :: V.Key(Session IO T.Text ByteString) -> ActionM ()
+signinAction :: VaultKey -> ActionM ()
 signinAction key = do
     req <- request
     let Just (_, insertSession) = V.lookup key (vault req)
@@ -46,3 +41,4 @@ signinAction key = do
                 liftIO $ insertSession "user" (encodeUtf8 (TL.toStrict n))
                 json $ object ["user_id" .= Number (scientific (toInteger (Model.AppUser.Entity.id u)) 0)]
             else json $ object ["errors" .= TL.toStrict "name or password is invalid"]
+
