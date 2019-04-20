@@ -7,10 +7,11 @@ import           Data.Aeson.Types
 import           Data.Scientific            (scientific)
 import           Data.Text.Encoding         (encodeUtf8)
 import qualified Data.Text.Lazy             as TL
-import           Data.Vault.Lazy
+import qualified Data.Vault.Lazy            as V
 import           Model.AppUser.Entity
 import           Model.AppUser.Insert
 import           Model.AppUser.Query
+import           Network.HTTP.Types.Status
 import           Network.Wai
 import           Util
 import           Web.Scotty
@@ -35,10 +36,10 @@ signinAction key = do
     p <- param "password"
     maybeU <- liftIO $ findByName n
     case maybeU of
-        Nothing -> status 400
-        Just u  -> if passwordHash u == hashPassword p
+        Nothing -> status status400
+        Just u  -> if passwordDigest u == hashPassword p
             then do
                 liftIO $ insertSession "user" (encodeUtf8 (TL.toStrict n))
                 json $ object ["user_id" .= Number (scientific (toInteger (Model.AppUser.Entity.id u)) 0)]
-            else status 400
+            else status status400
 

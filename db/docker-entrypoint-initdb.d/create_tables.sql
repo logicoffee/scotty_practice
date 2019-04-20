@@ -1,7 +1,7 @@
 CREATE TABLE app_user (
     id SERIAL PRIMARY KEY,
     name text NOT NULL UNIQUE,
-    password_hash text NOT NULL
+    password_digest text NOT NULL
 );
 
 CREATE TABLE item (
