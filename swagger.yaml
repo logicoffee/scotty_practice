@@ -35,10 +35,7 @@ paths:
               type: string
               description: session id
           schema:
-            type: object
-            properties:
-              id:
-                type: integer
+            $ref: '#/definitions/UserResponse'
         400:
           description: invalid request
           schema:
@@ -69,10 +66,7 @@ paths:
               type: string
               description: session id
           schema:
-            type: object
-            properties:
-              id:
-                type: integer
+            $ref: '#/definitions/UserResponse'
         400:
           description: invalid name password combination
           schema:
@@ -95,12 +89,7 @@ paths:
               type: string
               description: session id
           schema:
-            type: object
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
+            $ref: '#/definitions/UserResponse'
         401:
           description: not authenticated
     delete:
@@ -115,12 +104,7 @@ paths:
         200:
           description: user deleted
           schema:
-            type: object
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
+            $ref: '#/definitions/UserResponse'
         401:
           description: not authenticated
 
@@ -270,6 +254,13 @@ definitions:
         type: array
         items:
           type: string
+  UserResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
   Item:
     type: object
     properties:
