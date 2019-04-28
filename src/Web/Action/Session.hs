@@ -22,8 +22,8 @@ signupAction = do
         <*> param "password_confirmation"
     result <- liftIO $ runExceptT $ trySignup tmpU
     case result of
-        Left msgs -> json $ object ["errors" .= map TL.toStrict msgs]
-        Right uid -> json $ object ["user_id" .= Number (scientific (toInteger uid) 0)]
+        Left err   -> json err
+        Right resU -> json resU
 
 signinAction :: VaultKey -> ActionM ()
 signinAction key = do
@@ -38,6 +38,6 @@ signinAction key = do
         Just u  -> if passwordDigest u == hashPassword p
             then do
                 liftIO $ insertSession "user" (encodeUtf8 (TL.toStrict n))
-                json $ object ["user_id" .= Number (scientific (toInteger (Model.AppUser.id u)) 0)]
+                json $ toAppUserResponse u
             else status status400
 

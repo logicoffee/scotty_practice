@@ -7,6 +7,7 @@
 
 module Model.AppUser.Entity where
 
+import           Data.Aeson.Types
 import           Data.Functor.ProductIsomorphic.Class ((|$|), (|*|))
 import           Data.Text.Lazy                       (Text)
 import           Database.HDBC.Query.TH               (defineTableFromDB',
@@ -16,6 +17,8 @@ import           Database.HDBC.Schema.PostgreSQL      (driverPostgreSQL)
 import           Database.Relational.Pi               (Pi)
 import           GHC.Generics                         (Generic)
 import           Model.DB                             (connectPG)
+import qualified Model.Error                          as ME
+import           Prelude                              hiding (id)
 import           Util
 
 defineTableFromDB'
@@ -45,7 +48,20 @@ piAppUser = AppUser'
     |*| passwordDigest'
 
 -- TODO: バリデーションの実装
-makeAppUser' :: TmpAppUser -> Either [Text] AppUser'
+makeAppUser' :: TmpAppUser -> Either ME.Error AppUser'
 makeAppUser' (TmpAppUser name ps psConf)
     | ps == psConf = Right $ AppUser' name $ hashPassword ps
-    | otherwise    = Left ["password confirmation doesn't match password"]
+    | otherwise    = Left $ ME.Error ["password confirmation doesn't match password"]
+
+data AppUserResponse = AppUserResponse
+    { responseId   :: !Int
+    , responseName :: !Text
+    } deriving (Generic)
+
+instance FromJSON AppUserResponse
+instance ToJSON AppUserResponse
+
+toAppUserResponse :: AppUser -> AppUserResponse
+toAppUserResponse appU = AppUserResponse
+    (id appU)
+    (name appU)
