@@ -22,7 +22,7 @@ signupAction = do
         <*> param "password_confirmation"
     result <- liftIO $ runExceptT $ trySignup tmpU
     case result of
-        Left msgs -> json $ object ["errors" .= map TL.toStrict msgs]
+        Left err  -> json err
         Right uid -> json $ object ["user_id" .= Number (scientific (toInteger uid) 0)]
 
 signinAction :: VaultKey -> ActionM ()

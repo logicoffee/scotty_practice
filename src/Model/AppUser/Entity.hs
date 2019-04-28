@@ -16,6 +16,7 @@ import           Database.HDBC.Schema.PostgreSQL      (driverPostgreSQL)
 import           Database.Relational.Pi               (Pi)
 import           GHC.Generics                         (Generic)
 import           Model.DB                             (connectPG)
+import           Model.Error
 import           Util
 
 defineTableFromDB'
@@ -45,7 +46,7 @@ piAppUser = AppUser'
     |*| passwordDigest'
 
 -- TODO: バリデーションの実装
-makeAppUser' :: TmpAppUser -> Either [Text] AppUser'
+makeAppUser' :: TmpAppUser -> Either Error AppUser'
 makeAppUser' (TmpAppUser name ps psConf)
     | ps == psConf = Right $ AppUser' name $ hashPassword ps
-    | otherwise    = Left ["password confirmation doesn't match password"]
+    | otherwise    = Left $ Error ["password confirmation doesn't match password"]
